@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: coupon-manager-api
+    env: node
+    plan: free
+    buildCommand: cd server && npm install && npm run build
+    startCommand: cd server && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+    cronJobs:
+      - name: daily-expiry-check
+        schedule: "0 9 * * *"
+        command: curl -X POST https://coupon-manager-api.onrender.com/internal/jobs/daily -H "X-JOB-SECRET: ${JOB_SECRET}"
+
+databases:
+  - name: coupon-manager-db
+    plan: free
