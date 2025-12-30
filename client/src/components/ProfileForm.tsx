@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { usersApi, User } from '../api/users.api';
+import { usersApi } from '../api/users.api';
+import type { User } from '../api/users.api';
 
 export const ProfileForm: React.FC = () => {
   const queryClient = useQueryClient();

@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { storesApi, Store } from '../../api/admin/stores.api';
+import { storesApi } from '../../api/admin/stores.api';
+import type { Store } from '../../api/admin/stores.api';
 import { StoreForm } from '../../components/admin/StoreForm';
 
 export const StoresPage: React.FC = () => {

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Store } from '../../api/admin/stores.api';
+import type { Store } from '../../api/admin/stores.api';
 
 interface StoreFormProps {
   onSubmit: (data: { name: string; isActive?: boolean }) => void;

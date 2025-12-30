@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useCreateCoupon, useUpdateCoupon } from '../hooks/useCoupons';
 import { lookupApi } from '../api/lookup.api';
 import { useQuery } from '@tanstack/react-query';
-import { Coupon, CreateCouponData } from '../api/coupons.api';
+import type { Coupon, CreateCouponData } from '../api/coupons.api';
 
 interface CouponFormProps {
   groupId: string;

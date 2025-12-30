@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { multiCouponsApi, MultiCouponDefinition } from '../../api/admin/multi-coupons.api';
+import { multiCouponsApi } from '../../api/admin/multi-coupons.api';
+import type { MultiCouponDefinition } from '../../api/admin/multi-coupons.api';
 import { storesApi } from '../../api/admin/stores.api';
 import { MultiCouponForm } from '../../components/admin/MultiCouponForm';
 import { ResolveUnmappedButton } from '../../components/admin/ResolveUnmappedButton';

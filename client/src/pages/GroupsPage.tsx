@@ -1,7 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { groupsApi, Group } from '../api/groups.api';
+import { groupsApi } from '../api/groups.api';
+import type { Group } from '../api/groups.api';
 import { GroupForm } from '../components/GroupForm';
 
 export const GroupsPage: React.FC = () => {

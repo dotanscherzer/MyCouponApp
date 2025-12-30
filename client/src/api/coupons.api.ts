@@ -19,6 +19,7 @@ export interface Coupon {
     url: string;
     fileName?: string;
     isPrimary: boolean;
+    createdAt: string;
   }>;
   notes?: string;
   createdAt: string;

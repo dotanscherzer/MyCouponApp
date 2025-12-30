@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useUpdateCouponUsage } from '../hooks/useCoupons';
-import { UpdateUsageData } from '../api/coupons.api';
+import type { UpdateUsageData } from '../api/coupons.api';
 
 interface CouponUsageFormProps {
   groupId: string;

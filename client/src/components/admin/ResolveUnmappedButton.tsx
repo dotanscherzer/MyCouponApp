@@ -12,18 +12,15 @@ export const ResolveUnmappedButton: React.FC<ResolveUnmappedButtonProps> = ({
   definitionName,
 }) => {
   const queryClient = useQueryClient();
-  const [showConfirm, setShowConfirm] = useState(false);
 
   const resolveMutation = useMutation({
     mutationFn: () => multiCouponsApi.resolveUnmapped(definitionId),
     onSuccess: (data) => {
       alert(`Resolved ${data.resolvedCount} unmapped coupon(s) for "${definitionName}"`);
       queryClient.invalidateQueries({ queryKey: ['admin-unmapped-events'] });
-      setShowConfirm(false);
     },
     onError: (error: any) => {
       alert(error.response?.data?.error || 'Failed to resolve unmapped coupons');
-      setShowConfirm(false);
     },
   });
 

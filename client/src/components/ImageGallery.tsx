@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Image } from '../api/images.api';
+import type { Image } from '../api/images.api';
 import { imagesApi } from '../api/images.api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 

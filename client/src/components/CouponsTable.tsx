@@ -1,4 +1,4 @@
-import { Coupon } from '../api/coupons.api';
+import type { Coupon } from '../api/coupons.api';
 
 interface CouponsTableProps {
   coupons: Coupon[];

@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { membersApi, Member } from '../api/members.api';
+import { membersApi } from '../api/members.api';
+import type { Member } from '../api/members.api';
 
 interface MembersListProps {
   members: Member[];

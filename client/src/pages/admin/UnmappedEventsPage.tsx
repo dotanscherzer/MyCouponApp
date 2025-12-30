@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { unmappedEventsApi, UnmappedEvent } from '../../api/admin/unmapped-events.api';
+import { unmappedEventsApi } from '../../api/admin/unmapped-events.api';
+import type { UnmappedEvent } from '../../api/admin/unmapped-events.api';
 import { UnmappedEventCard } from '../../components/admin/UnmappedEventCard';
 
 export const UnmappedEventsPage: React.FC = () => {
@@ -13,7 +14,7 @@ export const UnmappedEventsPage: React.FC = () => {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: { status?: string; notes?: string } }) =>
+    mutationFn: ({ id, data }: { id: string; data: { status?: 'open' | 'handled' | 'ignored'; notes?: string } }) =>
       unmappedEventsApi.updateUnmappedEvent(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-unmapped-events'] });

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { MultiCouponDefinition } from '../../api/admin/multi-coupons.api';
-import { Store } from '../../api/admin/stores.api';
+import type { MultiCouponDefinition } from '../../api/admin/multi-coupons.api';
+import type { Store } from '../../api/admin/stores.api';
 
 interface MultiCouponFormProps {
   stores: Store[];

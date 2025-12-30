@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { couponsApi, Coupon, CreateCouponData, UpdateUsageData } from '../api/coupons.api';
+import { couponsApi } from '../api/coupons.api';
+import type { Coupon, CreateCouponData, UpdateUsageData } from '../api/coupons.api';
 
 export const useCoupons = (
   groupId: string,

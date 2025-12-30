@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { UnmappedEvent } from '../../api/admin/unmapped-events.api';
+import type { UnmappedEvent } from '../../api/admin/unmapped-events.api';
 
 interface UnmappedEventCardProps {
   event: UnmappedEvent;
-  onUpdate: (data: { status?: string; notes?: string }) => void;
+  onUpdate: (data: { status?: 'open' | 'handled' | 'ignored'; notes?: string }) => void;
   loading: boolean;
 }
 
