@@ -24,7 +24,7 @@ export const UnmappedEventCard: React.FC<UnmappedEventCardProps> = ({ event, onU
     }
   };
 
-  const handleStatusChange = (newStatus: string) => {
+  const handleStatusChange = (newStatus: 'open' | 'handled' | 'ignored') => {
     onUpdate({ status: newStatus });
   };
 

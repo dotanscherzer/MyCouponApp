@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { authApi } from '../api/auth.api';
-import type { AuthResponse } from '../api/auth.api';
 import apiClient from '../api/apiClient';
 
 interface User {

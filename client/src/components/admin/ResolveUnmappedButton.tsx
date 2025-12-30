@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { multiCouponsApi } from '../../api/admin/multi-coupons.api';
 
