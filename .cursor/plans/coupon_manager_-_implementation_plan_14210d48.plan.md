@@ -645,8 +645,3 @@ Coupon App/
 - `client/src/components/CouponForm.tsx` - טופס עם autocomplete
 - `client/src/components/CouponDetailsPage.tsx` - פרטי קופון
 - `client/src/pages/admin/AdminPanel.tsx` - לוח בקרה
-- `client/src/api/coupons.api.ts` - API client
-
-## סדר עדיפויות מומלץ
-
-1. **Phase 1** (Infrastructure): שלבים 1-2

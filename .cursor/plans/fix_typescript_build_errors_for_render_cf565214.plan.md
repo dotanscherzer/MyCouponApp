@@ -74,4 +74,3 @@ If needed, ensure the build command explicitly installs devDependencies, though 
 1. [server/package.json](server/package.json) - Move type definitions to dependencies
 2. [server/src/controllers/coupons.controller.ts](server/src/controllers/coupons.controller.ts) - Fix null checks and unused imports
 3. [server/src/controllers/images.controller.ts](server/src/controllers/images.controller.ts) - Fix ICouponImage type issue
-4. Multiple controller files - Fix unused parameters

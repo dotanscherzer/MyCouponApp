@@ -2,13 +2,16 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { ProtectedRoute } from '../components/ProtectedRoute';
 import { LoginPage } from '../pages/LoginPage';
 import { RegisterPage } from '../pages/RegisterPage';
+import { GroupsPage } from '../pages/GroupsPage';
+import { GroupDetailsPage } from '../pages/GroupDetailsPage';
+import { AcceptInvitationPage } from '../pages/AcceptInvitationPage';
+import { CouponsPage } from '../pages/CouponsPage';
+import { CouponDetailsPage } from '../pages/CouponDetailsPage';
 import { Layout } from '../components/Layout';
 
-// Placeholder pages - to be implemented
-const HomePage = () => <div>Home - Redirecting to Groups...</div>;
-const GroupsPage = () => <div>Groups Page - To be implemented</div>;
-const AdminPanel = () => <div>Admin Panel - To be implemented</div>;
-const SettingsPage = () => <div>Settings - To be implemented</div>;
+import { AdminPanel } from '../pages/admin/AdminPanel';
+import { SettingsPage } from '../pages/SettingsPage';
+import { HomePage } from '../pages/HomePage';
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -31,6 +34,46 @@ export const AppRoutes: React.FC = () => {
           <ProtectedRoute>
             <Layout>
               <GroupsPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/groups/:groupId"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <GroupDetailsPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/invitations/accept"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <AcceptInvitationPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/groups/:groupId/coupons"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <CouponsPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/groups/:groupId/coupons/:couponId"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <CouponDetailsPage />
             </Layout>
           </ProtectedRoute>
         }
