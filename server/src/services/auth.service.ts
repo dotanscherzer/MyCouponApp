@@ -19,16 +19,13 @@ export interface TokenPair {
 export async function generateTokens(userId: string, email: string, appRole: string): Promise<TokenPair> {
   const payload: TokenPayload = { userId, email, appRole };
 
-  const accessTokenOptions: SignOptions = {
-    expiresIn: jwtConfig.accessExpiresIn as string | number,
-  };
+  const accessToken = jwt.sign(payload, jwtConfig.accessSecret, {
+    expiresIn: jwtConfig.accessExpiresIn,
+  } as SignOptions);
 
-  const refreshTokenOptions: SignOptions = {
-    expiresIn: jwtConfig.refreshExpiresIn as string | number,
-  };
-
-  const accessToken = jwt.sign(payload, jwtConfig.accessSecret, accessTokenOptions);
-  const refreshToken = jwt.sign(payload, jwtConfig.refreshSecret, refreshTokenOptions);
+  const refreshToken = jwt.sign(payload, jwtConfig.refreshSecret, {
+    expiresIn: jwtConfig.refreshExpiresIn,
+  } as SignOptions);
 
   // Calculate expiry date for refresh token
   const expiresAt = new Date();
