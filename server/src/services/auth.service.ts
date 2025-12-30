@@ -20,11 +20,11 @@ export async function generateTokens(userId: string, email: string, appRole: str
   const payload: TokenPayload = { userId, email, appRole };
 
   const accessTokenOptions: SignOptions = {
-    expiresIn: jwtConfig.accessExpiresIn,
+    expiresIn: jwtConfig.accessExpiresIn as string | number,
   };
 
   const refreshTokenOptions: SignOptions = {
-    expiresIn: jwtConfig.refreshExpiresIn,
+    expiresIn: jwtConfig.refreshExpiresIn as string | number,
   };
 
   const accessToken = jwt.sign(payload, jwtConfig.accessSecret, accessTokenOptions);
