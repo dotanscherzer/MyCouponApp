@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { UnmappedMultiCouponEvent } from '../../models/UnmappedMultiCouponEvent.model';
 
-export const getUnmappedEvents = async (_req: Request, res: Response): Promise<void> => {
+export const getUnmappedEvents = async (req: Request, res: Response): Promise<void> => {
   try {
     const { status } = req.query;
 
