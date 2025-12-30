@@ -26,7 +26,6 @@ const userSchema = new Schema<IUser>(
     googleId: {
       type: String,
       required: false,
-      sparse: true,
     },
     displayName: {
       type: String,

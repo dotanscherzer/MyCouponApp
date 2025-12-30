@@ -7,4 +7,6 @@ export const jwtConfig = {
 
 if (!process.env.JWT_ACCESS_SECRET || !process.env.JWT_REFRESH_SECRET) {
   console.warn('Warning: JWT secrets are using default values. This is insecure for production!');
+  console.warn('Please set JWT_ACCESS_SECRET and JWT_REFRESH_SECRET environment variables in Render Dashboard.');
+  console.warn('See Docs/DEPLOYMENT_RENDER.md for instructions.');
 }

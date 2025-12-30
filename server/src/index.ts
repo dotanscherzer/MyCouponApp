@@ -12,8 +12,26 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(helmet());
+
+// CORS configuration - normalize origin by removing trailing slashes
+const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+const normalizedFrontendUrl = frontendUrl.replace(/\/$/, '');
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) {
+      return callback(null, true);
+    }
+    // Normalize the request origin by removing trailing slash
+    const normalizedOrigin = origin.replace(/\/$/, '');
+    if (normalizedOrigin === normalizedFrontendUrl) {
+      callback(null, true);
+    } else {
+      console.error(`CORS error: Origin ${origin} (normalized: ${normalizedOrigin}) not allowed. Allowed: ${normalizedFrontendUrl}`);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 app.use(express.json());
