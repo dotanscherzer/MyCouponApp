@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { jwtConfig } from '../config/jwt.config';
 import { RefreshToken } from '../models/RefreshToken.model';
@@ -19,13 +19,16 @@ export interface TokenPair {
 export async function generateTokens(userId: string, email: string, appRole: string): Promise<TokenPair> {
   const payload: TokenPayload = { userId, email, appRole };
 
-  const accessToken = jwt.sign(payload, jwtConfig.accessSecret, {
+  const accessTokenOptions: SignOptions = {
     expiresIn: jwtConfig.accessExpiresIn,
-  });
+  };
 
-  const refreshToken = jwt.sign(payload, jwtConfig.refreshSecret, {
+  const refreshTokenOptions: SignOptions = {
     expiresIn: jwtConfig.refreshExpiresIn,
-  });
+  };
+
+  const accessToken = jwt.sign(payload, jwtConfig.accessSecret, accessTokenOptions);
+  const refreshToken = jwt.sign(payload, jwtConfig.refreshSecret, refreshTokenOptions);
 
   // Calculate expiry date for refresh token
   const expiresAt = new Date();
