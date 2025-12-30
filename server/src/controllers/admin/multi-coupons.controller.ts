@@ -3,7 +3,7 @@ import { MultiCouponDefinition } from '../../models/MultiCouponDefinition.model'
 import { resolveUnmappedCoupons } from '../../services/multi-coupon.service';
 import { Types } from 'mongoose';
 
-export const getMultiCoupons = async (req: Request, res: Response): Promise<void> => {
+export const getMultiCoupons = async (_req: Request, res: Response): Promise<void> => {
   try {
     const definitions = await MultiCouponDefinition.find().sort({ name: 1 }).populate('storeIds');
     res.json(definitions.map(def => ({

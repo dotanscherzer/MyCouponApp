@@ -2,9 +2,7 @@ import { Coupon } from '../models/Coupon.model';
 import { NotificationPreference } from '../models/NotificationPreference.model';
 import { GroupMember } from '../models/GroupMember.model';
 import { User } from '../models/User.model';
-import { calculateStatus } from '../services/coupons.service';
 import { sendExpiryNotificationEmail } from '../services/email.service';
-import { Types } from 'mongoose';
 
 export interface DailyJobResult {
   expiredUpdated: number;

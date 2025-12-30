@@ -60,14 +60,14 @@ export const associateImage = async (req: Request, res: Response): Promise<void>
       });
     }
 
-    // Add new image
+    // Add new image (Mongoose will add _id automatically)
     coupon.images.push({
       url,
       fileName,
       mimeType,
       isPrimary: isPrimary || false,
       createdAt: new Date(),
-    });
+    } as any);
 
     // If no primary image exists, set this one as primary
     if (!coupon.images.some(img => img.isPrimary)) {

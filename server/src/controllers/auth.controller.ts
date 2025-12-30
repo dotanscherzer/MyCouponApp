@@ -93,7 +93,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const googleStart = (req: Request, res: Response): void => {
+export const googleStart = (_req: Request, res: Response): void => {
   const authUrl = googleClient.generateAuthUrl({
     access_type: 'offline',
     scope: ['profile', 'email'],

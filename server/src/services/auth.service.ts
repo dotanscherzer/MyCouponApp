@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { jwtConfig } from '../config/jwt.config';
-import { RefreshToken, IRefreshToken } from '../models/RefreshToken.model';
+import { RefreshToken } from '../models/RefreshToken.model';
 import { Types } from 'mongoose';
 import { hashToken } from '../utils/token.utils';
 

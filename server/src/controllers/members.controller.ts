@@ -1,7 +1,5 @@
 import { Request, Response } from 'express';
 import { GroupMember } from '../models/GroupMember.model';
-import { User } from '../models/User.model';
-import { Types } from 'mongoose';
 
 export const getMembers = async (req: Request, res: Response): Promise<void> => {
   try {

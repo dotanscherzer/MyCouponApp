@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Store } from '../../models/Store.model';
 
-export const getStores = async (req: Request, res: Response): Promise<void> => {
+export const getStores = async (_req: Request, res: Response): Promise<void> => {
   try {
     const stores = await Store.find().sort({ name: 1 });
     res.json(stores.map(store => ({

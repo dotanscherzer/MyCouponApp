@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { runDailyExpiryJob } from '../jobs/daily-expiry.job';
 
-export const runDailyJob = async (req: Request, res: Response): Promise<void> => {
+export const runDailyJob = async (_req: Request, res: Response): Promise<void> => {
   try {
     const result = await runDailyExpiryJob();
     res.json(result);

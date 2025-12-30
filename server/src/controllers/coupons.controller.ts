@@ -10,7 +10,6 @@ import {
   ListCouponsFilters,
 } from '../services/coupons.service';
 import { resolveMultiCoupon, handleUnmappedCoupon } from '../services/multi-coupon.service';
-import { Coupon } from '../models/Coupon.model';
 
 export const createCouponController = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -271,6 +270,11 @@ export const updateUsage = async (req: Request, res: Response): Promise<void> =>
 
     try {
       const coupon = await updateCouponUsage(couponId, groupId, mode, amount);
+
+      if (!coupon) {
+        res.status(404).json({ error: 'Coupon not found' });
+        return;
+      }
 
       res.json({
         id: coupon._id,
