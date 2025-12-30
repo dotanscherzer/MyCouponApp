@@ -1,0 +1,46 @@
+/* Utility Classes */
+
+.container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding-inline: var(--spacing-6);
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding-inline: var(--spacing-4);
+  }
+}
+
+/* Spacing utilities */
+.gap-1 { gap: var(--spacing-1); }
+.gap-2 { gap: var(--spacing-2); }
+.gap-3 { gap: var(--spacing-3); }
+.gap-4 { gap: var(--spacing-4); }
+.gap-6 { gap: var(--spacing-6); }
+
+/* Display utilities */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+
+/* Text utilities */
+.text-muted { color: var(--color-text-muted); }
+.text-center { text-align: center; }
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+

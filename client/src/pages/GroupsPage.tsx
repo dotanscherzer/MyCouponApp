@@ -4,6 +4,12 @@ import { useState } from 'react';
 import { groupsApi } from '../api/groups.api';
 import type { Group } from '../api/groups.api';
 import { GroupForm } from '../components/GroupForm';
+import { PageHeader } from '../components/layout/PageHeader/PageHeader';
+import { Card } from '../components/ui/Card/Card';
+import { Skeleton } from '../components/ui/Skeleton/Skeleton';
+import { ActionsMenu, type ActionItem } from '../components/ui/DropdownMenu/ActionsMenu';
+import { useCoupons } from '../hooks/useCoupons';
+import styles from './GroupsPage.module.css';
 
 export const GroupsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -24,19 +30,80 @@ export const GroupsPage: React.FC = () => {
   });
 
   if (isLoading) {
-    return <div>Loading groups...</div>;
+    return (
+      <div className={styles.page} dir="rtl">
+        <PageHeader title="קבוצות" />
+        <div className={styles.loadingContainer}>
+          <Skeleton height={120} className={styles.skeletonCard} />
+          <Skeleton height={120} className={styles.skeletonCard} />
+          <Skeleton height={120} className={styles.skeletonCard} />
+        </div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div>Error loading groups. Please try again.</div>;
+    return (
+      <div className={styles.page} dir="rtl">
+        <PageHeader title="קבוצות" />
+        <div>שגיאה בטעינת הקבוצות. אנא נסה שוב.</div>
+      </div>
+    );
   }
 
+  const GroupCard = ({ group }: { group: Group }) => {
+    const { data: coupons } = useCoupons(group.id, {});
+    const activeCoupons = coupons?.filter((c) => c.status === 'ACTIVE').length || 0;
+
+    const actions: ActionItem[] = [
+      { label: 'ניהול', onClick: () => navigate(`/groups/${group.id}`) },
+    ];
+
+    return (
+      <Card className={styles.groupCard} onClick={() => navigate(`/groups/${group.id}`)}>
+        <div className={styles.cardHeader}>
+          <div>
+            <h3 className={styles.groupName}>{group.name}</h3>
+            <div className={styles.metrics}>
+              <span className={styles.metric}>
+                <strong>{activeCoupons}</strong> קופונים פעילים
+              </span>
+            </div>
+          </div>
+          <div onClick={(e) => e.stopPropagation()}>
+            <ActionsMenu actions={actions} />
+          </div>
+        </div>
+        <div className={styles.cardFooter}>
+          <span className={styles.updated}>
+            עודכן: {new Date(group.updatedAt).toLocaleDateString('he-IL')}
+          </span>
+        </div>
+      </Card>
+    );
+  };
+
   return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h1>Groups</h1>
-        <button onClick={() => setShowCreateForm(true)}>Create Group</button>
-      </div>
+    <div className={styles.page} dir="rtl">
+      <PageHeader
+        title="קבוצות"
+        primaryAction={{
+          label: '+ צור קבוצה',
+          onClick: () => setShowCreateForm(true),
+        }}
+      />
+
+      {groups && groups.length === 0 ? (
+        <Card className={styles.emptyState}>
+          <p className={styles.emptyText}>אין קבוצות עדיין. צור את הקבוצה הראשונה שלך כדי להתחיל.</p>
+        </Card>
+      ) : (
+        <div className={styles.groupsGrid}>
+          {groups?.map((group) => (
+            <GroupCard key={group.id} group={group} />
+          ))}
+        </div>
+      )}
 
       {showCreateForm && (
         <GroupForm
@@ -45,38 +112,6 @@ export const GroupsPage: React.FC = () => {
           loading={createMutation.isPending}
         />
       )}
-
-      {groups && groups.length === 0 ? (
-        <div>No groups yet. Create your first group to get started.</div>
-      ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '20px' }}>
-          {groups?.map((group) => (
-            <div
-              key={group.id}
-              onClick={() => navigate(`/groups/${group.id}`)}
-              style={{
-                border: '1px solid #ccc',
-                borderRadius: '8px',
-                padding: '20px',
-                cursor: 'pointer',
-                transition: 'box-shadow 0.2s',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = 'none';
-              }}
-            >
-              <h2 style={{ margin: '0 0 10px 0' }}>{group.name}</h2>
-              <div style={{ color: '#666', fontSize: '14px' }}>
-                Created: {new Date(group.createdAt).toLocaleDateString()}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 };
-

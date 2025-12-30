@@ -1,0 +1,110 @@
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: var(--sidebar-width);
+  height: var(--topbar-height);
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  padding-inline: var(--spacing-6);
+}
+
+.content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-4);
+}
+
+.searchForm {
+  flex: 1;
+  max-width: 400px;
+}
+
+.searchInput {
+  width: 100%;
+  padding: var(--spacing-2) var(--spacing-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-body);
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+.searchInput:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.userButton {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-3);
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: var(--font-size-body);
+  color: var(--color-text);
+  transition: background-color var(--transition-fast);
+}
+
+.userButton:hover {
+  background-color: var(--color-background);
+}
+
+.userName {
+  font-weight: var(--font-weight-medium);
+}
+
+.userIcon {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.dropdownContent {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: var(--spacing-1);
+  min-width: 150px;
+}
+
+.dropdownItem {
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: var(--font-size-body);
+  color: var(--color-text);
+  outline: none;
+}
+
+.dropdownItem:hover,
+.dropdownItem:focus {
+  background-color: var(--color-background);
+}
+
+/* Mobile styles */
+@media (max-width: 1024px) {
+  .topbar {
+    right: 0;
+    padding-inline: var(--spacing-4);
+  }
+
+  .searchForm {
+    max-width: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .searchForm {
+    display: none;
+  }
+}
+

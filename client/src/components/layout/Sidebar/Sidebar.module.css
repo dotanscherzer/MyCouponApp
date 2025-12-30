@@ -1,0 +1,127 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background-color: var(--color-surface);
+  border-left: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  transition: transform var(--transition-base);
+}
+
+.header {
+  padding: var(--spacing-4);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: var(--font-size-section);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.mobileClose {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--color-text);
+}
+
+.nav {
+  flex: 1;
+  padding: var(--spacing-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-4);
+  border: none;
+  background: none;
+  text-align: right;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-size: var(--font-size-body);
+  transition: background-color var(--transition-fast);
+}
+
+.navItem:hover {
+  background-color: var(--color-background);
+}
+
+.navItem.active {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.icon {
+  font-size: 20px;
+}
+
+.label {
+  flex: 1;
+}
+
+.mobileMenuButton {
+  display: none;
+  position: fixed;
+  top: var(--spacing-4);
+  right: var(--spacing-4);
+  z-index: 101;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-2);
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+}
+
+/* Mobile styles */
+@media (max-width: 1024px) {
+  .sidebar {
+    transform: translateX(100%);
+  }
+
+  .sidebar.mobileOpen {
+    transform: translateX(0);
+  }
+
+  .mobileClose {
+    display: block;
+  }
+
+  .mobileMenuButton {
+    display: block;
+  }
+
+  .overlay {
+    display: block;
+  }
+}
+

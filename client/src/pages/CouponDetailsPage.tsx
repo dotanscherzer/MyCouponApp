@@ -1,19 +1,31 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useCoupon, useCancelCoupon } from '../hooks/useCoupons';
-import { CouponUsageForm } from '../components/CouponUsageForm';
+import { useCoupon, useCancelCoupon, useUpdateCoupon } from '../hooks/useCoupons';
 import { CouponForm } from '../components/CouponForm';
 import { ImageGallery } from '../components/ImageGallery';
 import { ImageUpload } from '../components/ImageUpload';
+import { PageHeader } from '../components/layout/PageHeader/PageHeader';
+import { Breadcrumbs } from '../components/ui/Breadcrumbs/Breadcrumbs';
+import { Card } from '../components/ui/Card/Card';
+import { Badge } from '../components/ui/Badge/Badge';
+import { Button } from '../components/ui/Button/Button';
+import { ConfirmDialog } from '../components/ui/Dialog/ConfirmDialog';
+import { ActionsMenu, type ActionItem } from '../components/ui/DropdownMenu/ActionsMenu';
 import { useAuth } from '../auth/AuthContext';
 import { groupsApi } from '../api/groups.api';
 import { useQuery } from '@tanstack/react-query';
+import { useToast } from '../hooks/useToast';
+import { resolveStoreName } from '../utils/storeResolver';
+import { useEffect } from 'react';
+import styles from './CouponDetailsPage.module.css';
 
 export const CouponDetailsPage: React.FC = () => {
   const { groupId, couponId } = useParams<{ groupId: string; couponId: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
   const [showEditForm, setShowEditForm] = useState(false);
+  const [storeName, setStoreName] = useState<string>('');
+  const { showToast, ToastComponent } = useToast();
 
   const { data: group } = useQuery({
     queryKey: ['group', groupId],
@@ -23,167 +35,179 @@ export const CouponDetailsPage: React.FC = () => {
 
   const { data: coupon, isLoading, error } = useCoupon(groupId!, couponId!);
   const cancelMutation = useCancelCoupon(groupId!, couponId!);
+  const updateMutation = useUpdateCoupon(groupId!, couponId!);
 
   const isEditor = group?.role === 'editor' || group?.role === 'admin' || user?.id === group?.ownerUserId;
   const isAdmin = group?.role === 'admin' || user?.id === group?.ownerUserId;
 
+  useEffect(() => {
+    if (coupon?.type === 'SINGLE' && coupon.storeId) {
+      resolveStoreName(coupon.storeId).then(setStoreName);
+    }
+  }, [coupon]);
+
+  const getStatusVariant = (status: string, expiryDate: string): 'active' | 'used' | 'expiring' | 'expired' | 'inactive' => {
+    if (status === 'EXPIRED') return 'expired';
+    if (status === 'USED' || status === 'CANCELLED') return 'used';
+    if (status === 'ACTIVE') {
+      const daysUntilExpiry = Math.ceil((new Date(expiryDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+      if (daysUntilExpiry <= 7 && daysUntilExpiry > 0) return 'expiring';
+      return 'active';
+    }
+    return 'inactive';
+  };
+
+  const getStatusLabel = (status: string): string => {
+    const labels: Record<string, string> = {
+      ACTIVE: 'פעיל',
+      PARTIALLY_USED: 'בשימוש חלקי',
+      USED: 'משומש',
+      EXPIRED: 'פג תוקף',
+      CANCELLED: 'בוטל',
+    };
+    return labels[status] || status;
+  };
+
   if (isLoading) {
-    return <div>Loading coupon...</div>;
+    return <div>טוען קופון...</div>;
   }
 
   if (error || !coupon) {
-    return <div>Error loading coupon. Please try again.</div>;
+    return <div>שגיאה בטעינת הקופון. אנא נסה שוב.</div>;
   }
 
-  const handleCancel = () => {
-    if (confirm('Are you sure you want to cancel this coupon?')) {
-      cancelMutation.mutate(undefined, {
-        onSuccess: () => {
-          navigate(`/groups/${groupId}/coupons`);
-        },
-      });
-    }
-  };
+  const actions: ActionItem[] = [];
+  if (isEditor) {
+    actions.push({ label: 'עריכה', onClick: () => setShowEditForm(true) });
+  }
+  if (isAdmin) {
+    actions.push({
+      label: 'ביטול קופון',
+      onClick: () => {
+        if (confirm('האם אתה בטוח שברצונך לבטל קופון זה?')) {
+          cancelMutation.mutate(undefined, {
+            onSuccess: () => {
+              showToast('קופון בוטל בהצלחה', undefined, 'success');
+              navigate(`/groups/${groupId}/coupons`);
+            },
+          });
+        }
+      },
+      variant: 'danger',
+      disabled: coupon.status === 'CANCELLED' || cancelMutation.isPending,
+    });
+  }
+
+  const storeDisplay = coupon.type === 'SINGLE' ? storeName || coupon.storeId || 'N/A' : coupon.multiCouponName || 'N/A';
 
   return (
-    <div>
-      <div style={{ marginBottom: '20px' }}>
-        <button onClick={() => navigate(`/groups/${groupId}/coupons`)} style={{ marginBottom: '10px' }}>
-          ← Back to Coupons
-        </button>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h1>{coupon.title}</h1>
-          {isEditor && (
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <button onClick={() => setShowEditForm(true)}>Edit</button>
-              {isAdmin && (
-                <button
-                  onClick={handleCancel}
-                  disabled={coupon.status === 'CANCELLED' || cancelMutation.isPending}
-                  style={{ backgroundColor: '#dc3545', color: 'white' }}
-                >
-                  {cancelMutation.isPending ? 'Cancelling...' : 'Cancel Coupon'}
-                </button>
+    <div className={styles.page} dir="rtl">
+      <Breadcrumbs
+        items={[
+          { label: 'קופונים', path: `/groups/${groupId}/coupons` },
+          { label: coupon.title },
+        ]}
+      />
+
+      <PageHeader
+        title={coupon.title}
+        subtitle={`${storeDisplay} • ${getStatusLabel(coupon.status)} • ${new Date(coupon.expiryDate).toLocaleDateString('he-IL')}`}
+        primaryAction={
+          isEditor
+            ? {
+                label: 'עריכה',
+                onClick: () => setShowEditForm(true),
+              }
+            : undefined
+        }
+        secondaryActions={
+          actions.length > 0
+            ? [
+                {
+                  label: 'עוד',
+                  onClick: () => {},
+                },
+              ]
+            : undefined
+        }
+      />
+
+      <div className={styles.content}>
+        <div className={styles.main}>
+          <Card className={styles.summaryCard}>
+            <h2 className={styles.cardTitle}>סיכום</h2>
+            <div className={styles.summaryGrid}>
+              <div className={styles.summaryItem}>
+                <span className={styles.label}>חנות / רב</span>
+                <span className={styles.value}>{storeDisplay}</span>
+              </div>
+              <div className={styles.summaryItem}>
+                <span className={styles.label}>סוג</span>
+                <Badge variant="default">{coupon.type === 'SINGLE' ? 'יחיד' : 'רב'}</Badge>
+              </div>
+              <div className={styles.summaryItem}>
+                <span className={styles.label}>סכום נותר / סה"כ</span>
+                <span className={styles.value}>
+                  {coupon.remainingAmount.toFixed(2)} / {coupon.totalAmount.toFixed(2)} {coupon.currency}
+                </span>
+              </div>
+              <div className={styles.summaryItem}>
+                <span className={styles.label}>תאריך תפוגה</span>
+                <span className={styles.value}>{new Date(coupon.expiryDate).toLocaleDateString('he-IL')}</span>
+              </div>
+              <div className={styles.summaryItem}>
+                <span className={styles.label}>סטטוס</span>
+                <Badge variant={getStatusVariant(coupon.status, coupon.expiryDate)}>
+                  {getStatusLabel(coupon.status)}
+                </Badge>
+              </div>
+            </div>
+          </Card>
+
+          <Card className={styles.detailsCard}>
+            <h2 className={styles.cardTitle}>פרטים</h2>
+            <div className={styles.detailsList}>
+              {coupon.notes && (
+                <div className={styles.detailItem}>
+                  <span className={styles.label}>הערות</span>
+                  <p className={styles.value}>{coupon.notes}</p>
+                </div>
+              )}
+              <div className={styles.detailItem}>
+                <span className={styles.label}>נוצר</span>
+                <span className={styles.value}>{new Date(coupon.createdAt).toLocaleString('he-IL')}</span>
+              </div>
+              <div className={styles.detailItem}>
+                <span className={styles.label}>עודכן</span>
+                <span className={styles.value}>{new Date(coupon.updatedAt).toLocaleString('he-IL')}</span>
+              </div>
+              {coupon.mappingStatus === 'UNMAPPED' && (
+                <div className={styles.detailItem}>
+                  <Badge variant="expired">לא ממופה</Badge>
+                </div>
               )}
             </div>
-          )}
-        </div>
-      </div>
+          </Card>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
-        <div>
-          <h2>Details</h2>
-          <table style={{ width: '100%' }}>
-            <tbody>
-              <tr>
-                <td style={{ padding: '8px', fontWeight: 'bold' }}>Type:</td>
-                <td style={{ padding: '8px' }}>{coupon.type}</td>
-              </tr>
-              <tr>
-                <td style={{ padding: '8px', fontWeight: 'bold' }}>Store/Multi-Coupon:</td>
-                <td style={{ padding: '8px' }}>
-                  {coupon.type === 'SINGLE' ? coupon.storeId || 'N/A' : coupon.multiCouponName || 'N/A'}
-                  {coupon.mappingStatus === 'UNMAPPED' && (
-                    <span style={{ marginLeft: '5px', color: '#dc3545' }}>(Unmapped)</span>
-                  )}
-                </td>
-              </tr>
-              {coupon.type === 'MULTI' && coupon.resolvedStoreIds && coupon.resolvedStoreIds.length > 0 && (
-                <tr>
-                  <td style={{ padding: '8px', fontWeight: 'bold' }}>Resolved Stores:</td>
-                  <td style={{ padding: '8px' }}>{coupon.resolvedStoreIds.join(', ')}</td>
-                </tr>
-              )}
-              <tr>
-                <td style={{ padding: '8px', fontWeight: 'bold' }}>Status:</td>
-                <td style={{ padding: '8px' }}>
-                  <span
-                    style={{
-                      backgroundColor:
-                        coupon.status === 'ACTIVE'
-                          ? '#28a745'
-                          : coupon.status === 'PARTIALLY_USED'
-                          ? '#ffc107'
-                          : coupon.status === 'EXPIRED' || coupon.status === 'CANCELLED'
-                          ? '#dc3545'
-                          : '#6c757d',
-                      color: 'white',
-                      padding: '4px 8px',
-                      borderRadius: '4px',
-                      fontSize: '12px',
-                    }}
-                  >
-                    {coupon.status}
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <td style={{ padding: '8px', fontWeight: 'bold' }}>Amount:</td>
-                <td style={{ padding: '8px' }}>
-                  {coupon.remainingAmount.toFixed(2)} / {coupon.totalAmount.toFixed(2)} {coupon.currency}
-                  <div style={{ marginTop: '5px', width: '200px', height: '10px', backgroundColor: '#e0e0e0', borderRadius: '5px', overflow: 'hidden' }}>
-                    <div
-                      style={{
-                        width: `${(coupon.usedAmount / coupon.totalAmount) * 100}%`,
-                        height: '100%',
-                        backgroundColor: coupon.usedAmount === coupon.totalAmount ? '#28a745' : '#ffc107',
-                      }}
-                    />
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td style={{ padding: '8px', fontWeight: 'bold' }}>Expiry Date:</td>
-                <td style={{ padding: '8px' }}>
-                  {new Date(coupon.expiryDate).toLocaleDateString()}
-                  {new Date(coupon.expiryDate) < new Date() && (
-                    <span style={{ marginLeft: '5px', color: '#dc3545' }}>Expired</span>
-                  )}
-                </td>
-              </tr>
-              <tr>
-                <td style={{ padding: '8px', fontWeight: 'bold' }}>Created:</td>
-                <td style={{ padding: '8px' }}>{new Date(coupon.createdAt).toLocaleString()}</td>
-              </tr>
-              {coupon.notes && (
-                <tr>
-                  <td style={{ padding: '8px', fontWeight: 'bold', verticalAlign: 'top' }}>Notes:</td>
-                  <td style={{ padding: '8px', whiteSpace: 'pre-wrap' }}>{coupon.notes}</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        <div>
-          <h2>Images</h2>
           {coupon.images && coupon.images.length > 0 && (
-            <ImageGallery
-              images={coupon.images}
-              groupId={groupId!}
-              couponId={couponId!}
-              canEdit={isEditor || false}
-            />
+            <Card className={styles.imagesCard}>
+              <h2 className={styles.cardTitle}>תמונות</h2>
+              <ImageGallery
+                images={coupon.images}
+                groupId={groupId!}
+                couponId={couponId!}
+                canEdit={isEditor || false}
+              />
+            </Card>
           )}
+
           {isEditor && (
-            <ImageUpload
-              groupId={groupId!}
-              couponId={couponId!}
-              onSuccess={() => {}}
-            />
+            <Card className={styles.uploadCard}>
+              <ImageUpload groupId={groupId!} couponId={couponId!} onSuccess={() => {}} />
+            </Card>
           )}
         </div>
       </div>
-
-      {isEditor && coupon.status !== 'CANCELLED' && coupon.status !== 'EXPIRED' && (
-        <CouponUsageForm
-          groupId={groupId!}
-          couponId={couponId!}
-          currentUsedAmount={coupon.usedAmount}
-          totalAmount={coupon.totalAmount}
-          onSuccess={() => {}}
-        />
-      )}
 
       {showEditForm && (
         <CouponForm
@@ -191,11 +215,13 @@ export const CouponDetailsPage: React.FC = () => {
           coupon={coupon}
           onSuccess={() => {
             setShowEditForm(false);
+            showToast('קופון עודכן בהצלחה', undefined, 'success');
           }}
           onCancel={() => setShowEditForm(false)}
         />
       )}
+
+      <ToastComponent />
     </div>
   );
 };
-

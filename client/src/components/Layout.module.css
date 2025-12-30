@@ -1,0 +1,38 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--color-background);
+}
+
+.content {
+  flex: 1;
+  margin-right: var(--sidebar-width);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.main {
+  flex: 1;
+  margin-top: var(--topbar-height);
+  padding: var(--spacing-6);
+  overflow-y: auto;
+}
+
+.container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Mobile styles */
+@media (max-width: 1024px) {
+  .content {
+    margin-right: 0;
+  }
+
+  .main {
+    padding: var(--spacing-4);
+  }
+}
+

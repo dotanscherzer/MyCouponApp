@@ -1,0 +1,61 @@
+.trigger {
+  background: none;
+  border: none;
+  padding: var(--spacing-2);
+  cursor: pointer;
+  color: var(--color-text-muted);
+  font-size: 20px;
+  line-height: 1;
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+.trigger:hover {
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+.content {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: var(--spacing-1);
+  min-width: 150px;
+  z-index: 100;
+}
+
+.item {
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: var(--font-size-body);
+  color: var(--color-text);
+  outline: none;
+  transition: background-color var(--transition-fast);
+}
+
+.item:hover,
+.item:focus {
+  background-color: var(--color-background);
+}
+
+.item.danger {
+  color: var(--color-danger);
+}
+
+.item.danger:hover,
+.item.danger:focus {
+  background-color: rgba(220, 38, 38, 0.1);
+}
+
+.item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+

@@ -1,0 +1,96 @@
+/* Global Styles with RTL Support */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  direction: ltr; /* Default, can be changed to rtl for Hebrew */
+}
+
+[dir="rtl"] {
+  direction: rtl;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-normal);
+  color: var(--color-text);
+  background-color: var(--color-background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--color-text);
+}
+
+h1 {
+  font-size: var(--font-size-title);
+}
+
+h2 {
+  font-size: var(--font-size-section);
+}
+
+/* RTL-aware utilities */
+[dir="rtl"] .flip-icon {
+  transform: scaleX(-1);
+}
+
+/* Logical properties for RTL support */
+.margin-start {
+  margin-inline-start: var(--spacing-4);
+}
+
+.margin-end {
+  margin-inline-end: var(--spacing-4);
+}
+
+.padding-start {
+  padding-inline-start: var(--spacing-4);
+}
+
+.padding-end {
+  padding-inline-end: var(--spacing-4);
+}
+
+/* Focus styles */
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* Responsive typography */
+@media (max-width: 640px) {
+  h1 {
+    font-size: var(--font-size-title-mobile);
+  }
+}
+

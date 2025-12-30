@@ -1,0 +1,36 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+}
+
+.active {
+  background-color: var(--color-status-active);
+  color: white;
+}
+
+.used,
+.inactive {
+  background-color: var(--color-status-used);
+  color: white;
+}
+
+.expiring {
+  background-color: var(--color-status-expiring);
+  color: white;
+}
+
+.expired {
+  background-color: var(--color-status-expired);
+  color: white;
+}
+
+.default {
+  background-color: var(--color-border);
+  color: var(--color-text);
+}
+
