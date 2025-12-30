@@ -13,7 +13,6 @@ const multiCouponDefinitionSchema = new Schema<IMultiCouponDefinition>(
     name: {
       type: String,
       required: true,
-      unique: true,
       trim: true,
     },
     storeIds: [

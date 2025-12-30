@@ -56,7 +56,6 @@ const couponSchema = new Schema<ICoupon>(
       type: Schema.Types.ObjectId,
       ref: 'Group',
       required: true,
-      index: true,
     },
     createdByUserId: {
       type: Schema.Types.ObjectId,
@@ -101,7 +100,6 @@ const couponSchema = new Schema<ICoupon>(
     expiryDate: {
       type: Date,
       required: true,
-      index: true,
     },
     totalAmount: {
       type: Number,

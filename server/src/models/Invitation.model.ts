@@ -18,7 +18,6 @@ const invitationSchema = new Schema<IInvitation>(
       type: Schema.Types.ObjectId,
       ref: 'Group',
       required: true,
-      index: true,
     },
     invitedEmail: {
       type: String,

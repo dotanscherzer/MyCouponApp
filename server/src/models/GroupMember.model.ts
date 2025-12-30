@@ -15,13 +15,11 @@ const groupMemberSchema = new Schema<IGroupMember>(
       type: Schema.Types.ObjectId,
       ref: 'Group',
       required: true,
-      index: true,
     },
     userId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
-      index: true,
     },
     role: {
       type: String,

@@ -16,7 +16,6 @@ const userSchema = new Schema<IUser>(
     email: {
       type: String,
       required: true,
-      unique: true,
       lowercase: true,
       trim: true,
     },
@@ -27,7 +26,6 @@ const userSchema = new Schema<IUser>(
     googleId: {
       type: String,
       required: false,
-      unique: true,
       sparse: true,
     },
     displayName: {

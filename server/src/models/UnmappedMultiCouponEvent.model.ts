@@ -24,7 +24,6 @@ const unmappedMultiCouponEventSchema = new Schema<IUnmappedMultiCouponEvent>(
       type: Schema.Types.ObjectId,
       ref: 'Coupon',
       required: true,
-      index: true,
     },
     groupId: {
       type: Schema.Types.ObjectId,

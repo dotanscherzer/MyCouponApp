@@ -12,7 +12,6 @@ const storeSchema = new Schema<IStore>(
     name: {
       type: String,
       required: true,
-      unique: true,
       trim: true,
     },
     isActive: {
