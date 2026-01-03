@@ -7,6 +7,8 @@ import { useAuth } from '../auth/AuthContext';
 import { MembersList } from '../components/MembersList';
 import { InviteMember } from '../components/InviteMember';
 import { GroupForm } from '../components/GroupForm';
+import { useCoupons } from '../hooks/useCoupons';
+import { CouponsTable } from '../components/CouponsTable';
 
 export const GroupDetailsPage: React.FC = () => {
   const { groupId } = useParams<{ groupId: string }>();
@@ -27,6 +29,11 @@ export const GroupDetailsPage: React.FC = () => {
     queryKey: ['members', groupId],
     queryFn: () => membersApi.getMembers(groupId!),
     enabled: !!groupId && activeTab === 'members',
+  });
+
+  const { data: coupons, isLoading: couponsLoading } = useCoupons(groupId!, {
+    sort: 'expiryDate',
+    order: 'asc',
   });
 
   const updateMutation = useMutation({
@@ -122,10 +129,19 @@ export const GroupDetailsPage: React.FC = () => {
 
       {activeTab === 'coupons' && (
         <div>
-          <div style={{ marginBottom: '20px' }}>
-            <button onClick={() => navigate(`/groups/${groupId}/coupons`)}>View All Coupons</button>
+          <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h2>קופונים</h2>
+            <button onClick={() => navigate(`/groups/${groupId}/coupons`)}>צפייה בכל הקופונים →</button>
           </div>
-          <p>Click the button above to view and manage coupons for this group.</p>
+          <CouponsTable
+            coupons={coupons || []}
+            groupId={groupId!}
+            onCouponClick={(couponId) => navigate(`/groups/${groupId}/coupons/${couponId}`)}
+            onEdit={(couponId) => navigate(`/groups/${groupId}/coupons`)}
+            onDelete={(couponId) => navigate(`/groups/${groupId}/coupons`)}
+            canEdit={isAdmin || false}
+            isLoading={couponsLoading}
+          />
         </div>
       )}
 

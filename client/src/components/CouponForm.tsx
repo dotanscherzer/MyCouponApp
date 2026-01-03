@@ -24,6 +24,7 @@ export const CouponForm: React.FC<CouponFormProps> = ({ groupId, coupon, onSucce
   const [totalAmount, setTotalAmount] = useState(coupon?.totalAmount.toString() || '');
   const [currency, setCurrency] = useState<'ILS' | 'USD' | 'EUR'>(coupon?.currency || 'ILS');
   const [notes, setNotes] = useState(coupon?.notes || '');
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 640);
 
   // Autocomplete states
   const [storeSearch, setStoreSearch] = useState('');
@@ -58,6 +59,15 @@ export const CouponForm: React.FC<CouponFormProps> = ({ groupId, coupon, onSucce
       setNotes(coupon.notes || '');
     }
   }, [coupon]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 640);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -125,14 +135,14 @@ export const CouponForm: React.FC<CouponFormProps> = ({ groupId, coupon, onSucce
         justifyContent: 'center',
         zIndex: 1000,
         overflowY: 'auto',
-        padding: '20px',
+        padding: isMobile ? '10px' : '20px',
       }}
       onClick={onCancel}
     >
       <div
         style={{
           backgroundColor: 'white',
-          padding: '30px',
+          padding: isMobile ? '20px' : '30px',
           borderRadius: '8px',
           maxWidth: '600px',
           width: '100%',
@@ -302,7 +312,12 @@ export const CouponForm: React.FC<CouponFormProps> = ({ groupId, coupon, onSucce
             </label>
           </div>
 
-          <div style={{ marginBottom: '20px', display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '15px' }}>
+          <div style={{ 
+            marginBottom: '20px', 
+            display: 'grid', 
+            gridTemplateColumns: isMobile ? '1fr' : '2fr 1fr', 
+            gap: '15px' 
+          }}>
             <div>
               <label>
                 Total Amount: *
@@ -349,11 +364,39 @@ export const CouponForm: React.FC<CouponFormProps> = ({ groupId, coupon, onSucce
             </label>
           </div>
 
-          <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-            <button type="button" onClick={onCancel} disabled={loading}>
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: isMobile ? 'column' : 'row',
+            gap: '10px', 
+            justifyContent: isMobile ? 'stretch' : 'flex-end' 
+          }}>
+            <button 
+              type="button" 
+              onClick={onCancel} 
+              disabled={loading}
+              style={isMobile ? { 
+                width: '100%', 
+                padding: '12px',
+                fontSize: '16px',
+                minHeight: '44px'
+              } : {
+                minHeight: '44px'
+              }}
+            >
               Cancel
             </button>
-            <button type="submit" disabled={loading}>
+            <button 
+              type="submit" 
+              disabled={loading}
+              style={isMobile ? { 
+                width: '100%', 
+                padding: '12px',
+                fontSize: '16px',
+                minHeight: '44px'
+              } : {
+                minHeight: '44px'
+              }}
+            >
               {loading ? 'Saving...' : isEdit ? 'Update' : 'Create'}
             </button>
           </div>
