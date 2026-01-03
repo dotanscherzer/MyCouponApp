@@ -137,8 +137,8 @@ export const GroupDetailsPage: React.FC = () => {
             coupons={coupons || []}
             groupId={groupId!}
             onCouponClick={(couponId) => navigate(`/groups/${groupId}/coupons/${couponId}`)}
-            onEdit={(couponId) => navigate(`/groups/${groupId}/coupons`)}
-            onDelete={(couponId) => navigate(`/groups/${groupId}/coupons`)}
+            onEdit={(_couponId) => navigate(`/groups/${groupId}/coupons`)}
+            onDelete={(_couponId) => navigate(`/groups/${groupId}/coupons`)}
             canEdit={isAdmin || false}
             isLoading={couponsLoading}
           />
