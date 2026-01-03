@@ -10,6 +10,14 @@ export const Sidebar: React.FC = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const isActive = (path: string) => {
+    if (path === '/groups') {
+      // Only match exact /groups path, not /groups/:groupId or /groups/:groupId/coupons
+      return location.pathname === '/groups';
+    }
+    if (path === '/') {
+      // Match / or any coupon-related paths
+      return location.pathname === '/' || (location.pathname.startsWith('/groups/') && location.pathname.includes('/coupons'));
+    }
     return location.pathname.startsWith(path);
   };
 
