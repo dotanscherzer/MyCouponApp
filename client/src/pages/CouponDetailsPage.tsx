@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useCoupon, useCancelCoupon, useUpdateCoupon } from '../hooks/useCoupons';
+import { useCoupon, useCancelCoupon } from '../hooks/useCoupons';
 import { CouponForm } from '../components/CouponForm';
 import { ImageGallery } from '../components/ImageGallery';
 import { ImageUpload } from '../components/ImageUpload';
@@ -8,9 +8,7 @@ import { PageHeader } from '../components/layout/PageHeader/PageHeader';
 import { Breadcrumbs } from '../components/ui/Breadcrumbs/Breadcrumbs';
 import { Card } from '../components/ui/Card/Card';
 import { Badge } from '../components/ui/Badge/Badge';
-import { Button } from '../components/ui/Button/Button';
-import { ConfirmDialog } from '../components/ui/Dialog/ConfirmDialog';
-import { ActionsMenu, type ActionItem } from '../components/ui/DropdownMenu/ActionsMenu';
+import { type ActionItem } from '../components/ui/DropdownMenu/ActionsMenu';
 import { useAuth } from '../auth/AuthContext';
 import { groupsApi } from '../api/groups.api';
 import { useQuery } from '@tanstack/react-query';
@@ -35,7 +33,6 @@ export const CouponDetailsPage: React.FC = () => {
 
   const { data: coupon, isLoading, error } = useCoupon(groupId!, couponId!);
   const cancelMutation = useCancelCoupon(groupId!, couponId!);
-  const updateMutation = useUpdateCoupon(groupId!, couponId!);
 
   const isEditor = group?.role === 'editor' || group?.role === 'admin' || user?.id === group?.ownerUserId;
   const isAdmin = group?.role === 'admin' || user?.id === group?.ownerUserId;

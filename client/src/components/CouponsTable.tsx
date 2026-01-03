@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import type { Coupon } from '../api/coupons.api';
 import { Badge } from './ui/Badge/Badge';
 import { Card } from './ui/Card/Card';
@@ -43,7 +42,7 @@ const getStatusLabel = (status: string): string => {
 
 export const CouponsTable: React.FC<CouponsTableProps> = ({
   coupons,
-  groupId,
+  groupId: _groupId,
   onCouponClick,
   onEdit,
   onDelete,

@@ -1,6 +1,5 @@
 import React from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { Button } from '../Button/Button';
 import styles from './Dialog.module.css';
 
 interface DialogProps {

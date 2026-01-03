@@ -29,7 +29,7 @@ export const ActionsMenu: React.FC<ActionsMenuProps> = ({
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Portal>
-        <DropdownMenu.Content className={styles.content} sideOffset={5} dir="rtl">
+        <DropdownMenu.Content className={styles.content} sideOffset={5}>
           {actions.map((action, index) => (
             <DropdownMenu.Item
               key={index}

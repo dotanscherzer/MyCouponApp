@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useCoupons, useDeleteCoupon, useUpdateCouponUsage } from '../hooks/useCoupons';
+import { useCoupons, useDeleteCoupon } from '../hooks/useCoupons';
 import { couponsApi } from '../api/coupons.api';
 import { CouponsTable } from '../components/CouponsTable';
 import { CouponFilters } from '../components/CouponFilters';
